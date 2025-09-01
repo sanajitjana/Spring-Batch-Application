@@ -19,8 +19,6 @@ public class MyEntity {
     @Column(unique = true)
     private String email;
     
-    private Integer age;
-    
     @Column(name = "created_at")
     private Instant createdAt;
     

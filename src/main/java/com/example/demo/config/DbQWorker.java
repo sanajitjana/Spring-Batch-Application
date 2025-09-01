@@ -53,7 +53,7 @@ public class DbQWorker {
 
             JobParameters params = new JobParametersBuilder()
                     .addString("jobId", rec.getJobId())
-                    .addString("s3Key", rec.getS3Key()) // now local path
+                    .addString("filePath", rec.getS3Key()) // local file path
                     .addLong("ts", System.currentTimeMillis())
                     .toJobParameters();
 

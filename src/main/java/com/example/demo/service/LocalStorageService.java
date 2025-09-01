@@ -21,10 +21,8 @@ public class LocalStorageService {
         Files.createDirectories(dir);
         Path target = dir.resolve(file.getOriginalFilename());
         Files.copy(file.getInputStream(), target, StandardCopyOption.REPLACE_EXISTING);
-        return target.toString(); // return path as "s3Key"
+        return target.toString(); // return local file path
     }
 
-    public Path getFilePath(String storedPath) {
-        return Paths.get(storedPath);
-    }
+
 }
