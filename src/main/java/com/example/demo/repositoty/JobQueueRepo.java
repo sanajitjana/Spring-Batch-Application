@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface JobQueueRepository extends JpaRepository<JobQueue, Long> {
+public interface JobQueueRepo extends JpaRepository<JobQueue, Long> {
 
     List<JobQueue> findTop10ByConsumedFalseOrderByIdAsc();
 }

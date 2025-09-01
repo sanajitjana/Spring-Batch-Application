@@ -9,7 +9,7 @@ import java.time.Instant;
 @Data
 @Entity
 @Table(name = "batch_jobs")
-public class BatchJobRecord {
+public class BatchJob {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

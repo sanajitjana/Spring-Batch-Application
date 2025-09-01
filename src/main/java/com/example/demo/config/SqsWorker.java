@@ -1,8 +1,8 @@
 package com.example.demo.config;
 
-import com.example.demo.entity.BatchJobRecord;
+import com.example.demo.entity.BatchJob;
 import com.example.demo.enums.JobState;
-import com.example.demo.repositoty.BatchJobRecordRepository;
+import com.example.demo.repositoty.BatchJobRepo;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.JobParameters;
@@ -25,13 +25,13 @@ public class SqsWorker {
 
     private final SqsClient sqs;
     private final String queueUrl;
-    private final BatchJobRecordRepository jobRepo;
+    private final BatchJobRepo jobRepo;
     private final JobLauncher jobLauncher;          // async launcher bean
     private final Job importJob;                    // your Spring Batch Job bean
     private final ObjectMapper mapper = new ObjectMapper();
 
     public SqsWorker(SqsClient sqs, @Value("${app.sqs.queue-url}") String queueUrl,
-                     BatchJobRecordRepository jobRepo,
+                     BatchJobRepo jobRepo,
                      @Qualifier("asyncJobLauncher") JobLauncher jobLauncher,
                      @Qualifier("importJob") Job importJob) {
         this.sqs = sqs; this.queueUrl = queueUrl; this.jobRepo = jobRepo;
@@ -58,7 +58,7 @@ public class SqsWorker {
                 String s3Key = body.get("s3Key");
 
                 // check DB state — protect against double processing
-                BatchJobRecord rec = jobRepo.findByJobId(jobId)
+                BatchJob rec = jobRepo.findByJobId(jobId)
                         .orElseThrow(() -> new IllegalStateException("No job record for " + jobId));
 
                 if (rec.getState() != JobState.PENDING) {

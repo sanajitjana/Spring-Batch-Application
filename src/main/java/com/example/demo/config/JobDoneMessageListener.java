@@ -1,7 +1,7 @@
 package com.example.demo.config;
 
 import com.example.demo.enums.JobState;
-import com.example.demo.repositoty.BatchJobRecordRepository;
+import com.example.demo.repositoty.BatchJobRepo;
 import com.example.demo.service.S3Service;
 import org.springframework.batch.core.BatchStatus;
 import org.springframework.batch.core.JobExecution;
@@ -11,12 +11,12 @@ import org.springframework.stereotype.Component;
 import java.time.Instant;
 
 @Component
-public class JobCompletionNotificationListener extends JobExecutionListenerSupport {
+public class JobDoneMessageListener extends JobExecutionListenerSupport {
 
-    private final BatchJobRecordRepository jobRepo;
+    private final BatchJobRepo jobRepo;
     private final S3Service s3Service;
 
-    public JobCompletionNotificationListener(BatchJobRecordRepository jobRepo, S3Service s3Service) {
+    public JobDoneMessageListener(BatchJobRepo jobRepo, S3Service s3Service) {
         this.jobRepo = jobRepo;
         this.s3Service = s3Service;
     }

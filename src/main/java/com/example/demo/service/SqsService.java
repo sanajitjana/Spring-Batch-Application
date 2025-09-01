@@ -12,7 +12,7 @@ import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
-public class SqsSender {
+public class SqsService {
 
     private final SqsClient sqs;
     private final ObjectMapper mapper = new ObjectMapper();

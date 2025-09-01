@@ -1,10 +1,10 @@
 package com.example.demo.config;
 
-import com.example.demo.entity.BatchJobRecord;
+import com.example.demo.entity.BatchJob;
 import com.example.demo.entity.JobQueue;
 import com.example.demo.enums.JobState;
-import com.example.demo.repositoty.BatchJobRecordRepository;
-import com.example.demo.repositoty.JobQueueRepository;
+import com.example.demo.repositoty.BatchJobRepo;
+import com.example.demo.repositoty.JobQueueRepo;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.JobParameters;
 import org.springframework.batch.core.JobParametersBuilder;
@@ -17,17 +17,17 @@ import java.time.Instant;
 import java.util.List;
 
 @Component
-public class LocalQueueWorker {
+public class DbQWorker {
 
-    private final JobQueueRepository queueRepo;
-    private final BatchJobRecordRepository jobRepo;
+    private final JobQueueRepo queueRepo;
+    private final BatchJobRepo jobRepo;
     private final JobLauncher jobLauncher;
     private final Job importJob;
 
-    public LocalQueueWorker(JobQueueRepository queueRepo,
-                            BatchJobRecordRepository jobRepo,
-                            @Qualifier("asyncJobLauncher") JobLauncher jobLauncher,
-                            @Qualifier("importJob") Job importJob) {
+    public DbQWorker(JobQueueRepo queueRepo,
+                     BatchJobRepo jobRepo,
+                     @Qualifier("asyncJobLauncher") JobLauncher jobLauncher,
+                     @Qualifier("importJob") Job importJob) {
         this.queueRepo = queueRepo;
         this.jobRepo = jobRepo;
         this.jobLauncher = jobLauncher;
@@ -39,7 +39,7 @@ public class LocalQueueWorker {
         List<JobQueue> messages = queueRepo.findTop10ByConsumedFalseOrderByIdAsc();
 
         for (JobQueue msg : messages) {
-            BatchJobRecord rec = jobRepo.findByJobId(msg.getJobId()).orElseThrow();
+            BatchJob rec = jobRepo.findByJobId(msg.getJobId()).orElseThrow();
 
             if (rec.getState() != JobState.PENDING) {
                 msg.setConsumed(true);
